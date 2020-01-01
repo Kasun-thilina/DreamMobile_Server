@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"com.dream.mobile.rmi.interfaces","l":"DbFunctions"},{"p":"com.dream.mobile.rmi.interfaces","l":"Questions"},{"p":"com.dream.mobile.rmi.interfaces","l":"RemoteInterface"},{"p":"com.dream.mobile.server","l":"Server"}]
