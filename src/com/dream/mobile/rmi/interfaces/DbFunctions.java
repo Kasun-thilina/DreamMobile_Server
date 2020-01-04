@@ -228,10 +228,12 @@ public class DbFunctions implements RemoteInterface {
 		return answers;
 
 	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String getChart() throws Exception {
+	public String getChart(ArrayList<String> labelNames,ArrayList<Integer> values,String heading,String chartType) throws Exception {
 		/**
 		 * Creating the JSON Array for the API request using json-simple.jar external
 		 * library
@@ -247,9 +249,8 @@ public class DbFunctions implements RemoteInterface {
 
 		// JSON Array for graph labels
 		JSONArray labels = new JSONArray();
-		labels.add("Hello");
-		labels.add("World");
-		labels.add("World");
+		labels.addAll(labelNames);
+		
 
 		// Setting up values for datasets node
 		// Main JSON array of dataSets
@@ -257,24 +258,22 @@ public class DbFunctions implements RemoteInterface {
 		// ArrayList for the DataSet Values
 		LinkedHashMap dataSetValues = new LinkedHashMap();
 		// ArrayList for the Label Values
-		ArrayList<String> dataSetLabel = new ArrayList<String>();
-		dataSetLabel.add("FOO");
+		/*ArrayList<String> dataSetLabel = new ArrayList<String>();
+		dataSetLabel.add(heading);*/
 		// dataSetLabel.add("2");
 
 		// ArrayList for the Data Values
 		ArrayList<Integer> dataSetData = new ArrayList<Integer>();
-		dataSetData.add(4);
-		dataSetData.add(2);
-		dataSetData.add(4);
+		dataSetData.addAll(values);
 
 		// setting up the Chart JSON Array with values
 
 		data.put("labels", labels);
-		dataSetValues.put("label", "FOO");
+		dataSetValues.put("label", heading);
 		dataSetValues.put("data", dataSetData);
 		dataSets.add(dataSetValues);
 		data.put("datasets", dataSets);
-		chartContent.put("type", "bar");
+		chartContent.put("type", chartType);
 		chartContent.put("data", data);
 		chart.put("chart", chartContent);
 
@@ -303,6 +302,30 @@ public class DbFunctions implements RemoteInterface {
 		}
 		return url;
 
+	}
+
+	@Override
+	public int getItemCount(String coloumnName,String itemName) throws Exception {
+		ResultSet rs = null;
+		Integer count=0;
+
+		ServerUI.printLine("Getting item count of"+itemName, null);
+
+		// Creating the query to access database
+		stmt = conn.createStatement();
+		// SQL Query to get data from database
+		String sql = "SELECT COUNT( * ) as total FROM analytics WHERE "+coloumnName+"='"+ itemName+"'";
+		// Executing the SQL Query
+		try {
+			rs = stmt.executeQuery(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		while(rs.next()) {
+			count=rs.getInt("total");
+		}
+
+		return count;
 	}
 
 }
